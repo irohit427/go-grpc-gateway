@@ -20,4 +20,13 @@ message GreetManyTimesResponse {
 service GreetService{
     // Server Streaming
     rpc GreetManyTimes(GreetManyTimesRequest) returns(stream GreetManyTimesResponse) {};
+    rpc Greet(GreetRequest) returns (GreetResponse) {};
+}
+
+message GreetRequest {
+    Greeting greeting = 1;
+}
+
+message GreetResponse {
+    string message = 1;
 }

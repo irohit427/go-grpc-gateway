@@ -19,7 +19,8 @@ func main() {
 	defer conn.Close()
 	c := greetpb.NewGreetServiceClient(conn)
 	fmt.Printf("Created client %v", c)
-	doServerStreaming(c)
+	doUnary(c)
+	//doServerStreaming(c)
 }
 
 func doServerStreaming(c greetpb.GreetServiceClient) {
@@ -46,4 +47,18 @@ func doServerStreaming(c greetpb.GreetServiceClient) {
 		}
 		log.Println(msg.GetResult())
 	}
+}
+
+func doUnary(c greetpb.GreetServiceClient) {
+	req := &greetpb.GreetRequest{
+		Greeting: &greetpb.Greeting{
+			FirstName: "Rohit",
+			LastName:  "Raj",
+		},
+	}
+	res, err := c.Greet(context.Background(), req)
+	if err != nil {
+		log.Fatalf("error while calling greet %v", err)
+	}
+	log.Printf("Response form greet: %v", res.Message)
 }
