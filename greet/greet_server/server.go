@@ -4,12 +4,26 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 
-	"github.com/irohit427/go_grpc_course/greet/greetpb"
+	"github.com/irohit427/go_grpc/greet/greetpb"
 	"google.golang.org/grpc"
 )
 
 type server struct {
+}
+
+func (*server) GreetManyTimes(req *greetpb.GreetManyTimesRequest, stream greetpb.GreetService_GreetManyTimesServer) error {
+	firstName := req.GetGreet().GetFirstName()
+	for i := 0; i < 10; i++ {
+		result := "Hello " + firstName
+		res := &greetpb.GreetManyTimesResponse{
+			Result: result,
+		}
+		stream.Send(res)
+		time.Sleep(500 * time.Millisecond)
+	}
+	return nil
 }
 
 func main() {
